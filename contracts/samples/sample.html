@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript">
+    console.log("start script")
+
+
+    function sendMessage(reciver, question, amount, configs) {
+        let address = '0x0f4dc7e7bcc8089631552ab5278f95d588a788fc'
+        var abi = '[{"constant": false,"inputs": [{"name": "reciver","type": "string"},{"name": "question","type": "string"},{"name": "configs","type": "string"}],"name": "askQuestion","outputs": [],"payable": true,"stateMutability": "payable","type": "function"}]';
+        var AskMeContract = web3.eth.contract(jQuery.parseJSON(abi));
+
+        var contractInstance = AskMeContract.at(address);
+        var accounts = web3.eth.accounts;
+
+        if (accounts.length == 0) {
+            ethereum.enable(function (error, result) {
+
+            });
+        } else {
+            contractInstance.askQuestion(reciver, question, configs, {value: web3.toWei(amount, 'ether')}, function(error, result) {
+                console.log(result);
+            });
+        }
+    }
+    
+    function testFunction() {
+        sendMessage("Yarik", "How are you?", 0.1, "");
+    }
+    
+    function prepareWeb3UI() {
+        
+        document.getElementById("output").innerHTML = '<input id="clickMe" type="button" value="clickme" onclick="testFunction();" />'
+    }
+
+    window.addEventListener('load', function () {
+        if (window.ethereum) {
+            window.web3 = new Web3(ethereum);
+            prepareWeb3UI();
+            ethereum.enable(function (error, result) {
+                console.log("done");
+            });
+        } else if (window.web3) {
+            window.web3 = new Web3(web3.currentProvider);
+            prepareWeb3UI();
+        } else {
+            console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+        }
+    })
+    </script>
+</head>
+<body>
+
+    <div id="output"></div>
+</body>
+</html>

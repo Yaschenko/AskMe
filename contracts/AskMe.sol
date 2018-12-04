@@ -8,13 +8,14 @@ contract AskMe is Ownable {
     using SafeMath for uint;
     //events
     event DidSendQuestionEvent(uint id, address sender, string reciver, string question, string configs, uint payout);
-    event DidAswerQuestionEvent(uint id, string sender, address reciver, string answer, string configs);
+    event DidAswerQuestionEvent(uint id, string sender, address reciver, address payoutAddress, string answer, string configs);
+    event DidRejectQuestionEvent(uint id, string sender, address user);
     //
     address private manager;
     uint private questionsCount;
     uint private fee = 0.0 ether;
     uint private minimumProfit = 0.0 ether;
-
+    mapping(uint => uint) private payouts;
     constructor() public {
         manager = msg.sender;
     }
@@ -46,13 +47,23 @@ contract AskMe is Ownable {
     }
     //
     function askQuestion(string reciver, string question, string configs) public payable {
-        require(msg.value > fee);
+        require(msg.value > fee.add(minimumProfit));
         questionsCount += 1;
-        emit DidSendQuestionEvent(questionsCount, msg.sender, reciver, question, configs, msg.value);
+        payouts[questionsCount] = msg.value.sub(fee);
+        emit DidSendQuestionEvent(questionsCount, msg.sender, reciver, question, configs, payouts[questionsCount]);
     }
 
-    function answerQuestion(uint id, string sender, address user, string text, string config) public onlyManager {
-        emit DidAswerQuestionEvent(id, sender, user, text, config);
+    function answerQuestion(uint id, string sender, address user, address payoutAddress, string text, string config) public onlyManager {
+        uint payout = payouts[id];
+        payouts[id] = 0;
+        payoutAddress.transfer(payout);
+        emit DidAswerQuestionEvent(id, sender, user, payoutAddress, text, config);
     }
-    
+    function rejectQuestion(uint id, string sender, address user) public onlyManager {
+        uint payout = payouts[id];
+        payouts[id] = 0;
+        user.transfer(payout);
+        emit DidRejectQuestionEvent(id, sender, user);
+    }
+    // function cancelQuestion()
 }

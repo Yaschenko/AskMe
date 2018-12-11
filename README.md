@@ -11,9 +11,9 @@
 ### askQuestion
 - fn: askQuestion(string reciver, string question, string configs) public payable
 - params:
-  reciver : string
-  question : string
-  configs : string(optional)
+  - reciver : string
+  - question : string
+  - configs : string(optional)
   
 ### answerQuestion
 - fn: answerQuestion(uint id, string sender, address user, address payoutAddress, string text, string config) public onlyManager

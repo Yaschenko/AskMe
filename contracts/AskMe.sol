@@ -17,7 +17,8 @@ contract AskMe is Ownable {
     uint private minimumProfit = 0.0 ether;
     mapping(uint => uint) private payouts;
     constructor() public {
-        manager = msg.sender;
+        // manager = msg.sender;
+        manager = 0x115bCe73559ffcbd5A6374C988B8502C90E17273;
     }
 
     modifier onlyManager() {
@@ -46,11 +47,12 @@ contract AskMe is Ownable {
         minimumProfit = profit;
     }
     //
-    function askQuestion(string reciver, string question, string configs) public payable {
+    function askQuestion(string reciver, string question, string configs) public payable returns(uint) {
         require(msg.value > fee.add(minimumProfit));
         questionsCount += 1;
         payouts[questionsCount] = msg.value.sub(fee);
         emit DidSendQuestionEvent(questionsCount, msg.sender, reciver, question, configs, payouts[questionsCount]);
+        return questionsCount;
     }
 
     function answerQuestion(uint id, string sender, address user, address payoutAddress, string text, string config) public onlyManager {

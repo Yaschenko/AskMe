@@ -35,6 +35,12 @@
   - user : address
 - remarks: if user rejected question, all profit automatically moves to the questioner(user)
 
+### donateQuestion
+- fn: function donateQuestion(uint id) public payable 
+- params:
+  - id : uint
+
+  
 ## Events
 ### DidSendQuestionEvent(uint id, address sender, string reciver, string question, string configs, uint payout);
 ### DidAswerQuestionEvent(uint id, string sender, address reciver, address payoutAddress, string answer, string configs);

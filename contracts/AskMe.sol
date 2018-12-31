@@ -70,7 +70,7 @@ contract AskMe is Ownable {
     }
     //
     function calculateFee(uint value) private view returns(uint) {
-        uint feeValue = value.mul(fee).div(1000);
+        uint feeValue = value.mul(fee).div(100000);
         if (feeValue > minimumFee) {
             return feeValue;
         } else {
@@ -84,7 +84,7 @@ contract AskMe is Ownable {
         owner.transfer(feeValue);
         uint payout = msg.value.sub(feeValue);
         QuestionObject memory questionData = QuestionObject(reciver, msg.sender, payout);
-        uint index = questions.push(questionData);
+        uint index = questions.push(questionData) - 1;
         emit DidSendQuestionEvent(index, msg.sender, reciver, question, configs, payout);
         return index;
     }

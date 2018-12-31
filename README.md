@@ -4,7 +4,7 @@
 ## Description:
 
 ## Rinkeby Address:
-### 0xd5de5a14fa28c527d9054105813a9eba71a1a3b9
+### 0x638743e66e433fe8de1b79fdd34781fd35ba71a9
 - fee: 1% 
 - manager address: 0x115bCe73559ffcbd5A6374C988B8502C90E17273
 ### 0xad9acc7a65153d7f757fcc482f3c5d2fe4b405b3 - deprecated
